@@ -1,0 +1,280 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+  int data;
+  struct node *link;
+};
+
+typedef struct node *NODE;
+
+NODE getnode() {
+  NODE x;
+  x = (NODE)malloc(sizeof(NODE));
+  if (x == NULL) {
+    printf("Memory not allocated.\n");
+    exit(0);
+  }
+  return x;
+}
+
+NODE ins_frt(NODE first, int item) {
+  NODE temp;
+  temp = getnode();
+  temp->data = item;
+  temp->link = first;
+  return temp;
+}
+
+NODE dlt_frt(NODE first) {
+  NODE temp;
+
+  if (first == NULL) {
+    printf("List empty.\n");
+    exit(0);
+  }
+  temp = first;
+  printf("The element deleted is: %d \n", temp->data);
+  first = first->link;
+  free(temp);
+
+  return first;
+}
+
+NODE ins_rear(NODE first, int item) {
+  NODE temp, cur;
+  temp = getnode();
+  temp->data = item;
+  temp->link = NULL;
+
+  if (first == NULL) {
+    return temp;
+  }
+  cur = first;
+  while (cur->link != NULL) {
+    cur = cur->link;
+  }
+  cur->link = temp;
+
+  return first;
+}
+
+NODE dlt_rear(NODE first) {
+  NODE prev, cur;
+  
+  if(first == NULL) {
+    printf("List empty.\n");
+    exit(0);
+  }
+  else if(first -> link == NULL) {
+    printf("Element to be deleted is : %d", first -> data);
+    free(first);
+    return NULL;
+  }
+  else {
+    prev = NULL;
+    cur = first;
+
+    while(cur -> link != NULL) {
+      prev = cur;
+      cur = cur -> link;
+    }
+    printf("\nElement deleted is : %d \n", cur -> data);
+    prev -> link = NULL;
+    free(cur);
+    return first;
+  }
+}
+
+NODE ins_pos(NODE first, int pos, int item) {
+  NODE temp, cur, prev;
+  int count = 1;
+  temp = getnode();
+  temp -> data = item;
+  temp -> link = NULL;
+
+  if(first == NULL) {
+    printf("List is empty and insertion is not possible.\n");
+    exit(0);
+  }
+  prev = NULL;
+  cur = first;
+  
+  while(cur != NULL) {
+    if(pos == count) {
+      temp -> link = prev -> link;
+      prev -> link = temp;
+    }
+    prev = cur;
+    cur = cur -> link;
+    count++;
+  }
+  return first;
+}
+
+NODE dlt_pos(NODE first, int pos) {
+  NODE cur, prev;
+  int count = 1;
+
+  if(first == NULL) {
+    printf("List Empty.\n");
+    exit(0);
+  }
+  cur = first;
+  prev = NULL;
+  
+  while(cur != NULL) {
+    if(pos == count) {
+      prev -> link = cur -> link;
+      printf("Element to be deleted is : %d\n", cur -> data);
+      free(cur);
+      break;
+    }
+    count++;
+    prev = cur;
+    cur = cur -> link;
+  }
+
+  return first;  
+}
+
+void display(NODE first) {
+  NODE temp;
+  temp = first;
+  if(first == NULL) {
+    printf("List Empty.\n");
+    exit(0);
+  }
+  printf("The elements present in the list are:\n");
+  while(temp != NULL) {
+    printf("%d\t", temp -> data);
+    temp = temp -> link;
+  }
+}
+
+int count(NODE first) {
+  NODE temp;
+  int count = 0;
+
+  if(first == NULL) {
+    return count;
+  }
+  temp = first;
+  while(temp != NULL) {
+    count++;
+    temp = temp -> link;
+  }
+  return count;
+}
+
+void search(NODE first, int ele) {
+  NODE temp;
+  int count = 0;
+
+  if(first == NULL) {
+    printf("List empty, search not possible.\n");
+    exit(0);
+  }
+  temp = first;
+  while(temp != NULL) {
+    count++;
+    if(temp -> data == ele) {
+      break;
+    }
+    temp = temp -> link;
+  }
+  if(count == 0) {
+    printf("Search Unsuccessful.\n");
+  }
+  else {
+    printf("Search successful and the elemwnt %d is present in position %d", ele, count);
+  }
+}
+
+int main() {
+  NODE first;
+  first = NULL;
+  int item, ch, pos;
+
+  printf("\n 1. Insert Front\n 2. Delete front\n 3. Insert Rear\n 4. Delete rear\n 5. Insert an element at a position\n 6. Delete an element from a position\n 7. Display elements\n 8. Count the number of nodes\n 9. Search for an element\n");
+  printf("\nEnter your choice : ");
+  scanf("%d", &ch);
+
+  while(ch) {
+    switch(ch) {
+      case 1 : printf("\nInsert Front\n");
+               scanf("%d", &item);
+               first = ins_frt(first, item);
+               display(first);
+               printf("\n");
+               break;
+
+      case 2 : printf("\nDelete Front\n");
+               printf("Before Deletion : ");
+               display(first);
+               printf("\nAfter deletion : ");
+               first = dlt_frt(first);
+               display(first);
+               printf("\n");
+			         break;
+
+      case 3 : printf("\nInsert Rear\n");
+               scanf("%d", &item);
+               first = ins_rear(first, item);
+               display(first);
+               printf("\n");
+			         break;
+
+      case 4 : printf("\nDelete Rear\n");
+               printf("Before Deletion : ");
+               display(first);
+               first = dlt_rear(first);
+               printf("\nAfter deletion : ");
+               display(first);
+               printf("\n");
+			          break;
+
+      case 5 : printf("\nInsert at a given position\n");
+               printf("Insert element : ");
+               scanf("%d", &item);
+               printf("Enter the position at which you want to insert the element : ");
+               scanf("%d", &pos);
+               printf("\n");
+               first = ins_pos(first, pos, item);
+               display(first);
+               printf("\n");
+		           break;
+
+      case 6 : printf("\nDelete from a given position\n");
+               scanf("%d", &pos);
+               printf("Before Deletion : ");
+               display(first);
+               first = dlt_pos(first, pos);
+               printf("\nAfer deletion : ");
+               display(first);
+               printf("\n");
+			         break;
+
+      case 7 : printf("\nDisplay the elements\n");
+               display(first);
+               printf("\n");
+			         break;
+
+      case 8 : printf("\nCount the number of nodes\n");
+               printf("The number of nodes in the current list is : %d",count(first));
+               printf("\n");
+			         break;
+
+      case 9 : printf("\nSearching for an element\n");
+               scanf("%d", &item);
+               search(first, item);
+               printf("\n");
+		           break;
+    }
+    printf("\n\n");
+    printf("Enter you choice : ");
+    scanf("%d", &ch);
+  }
+  return 0;
+  
+}

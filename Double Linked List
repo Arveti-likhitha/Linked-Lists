@@ -4,6 +4,7 @@
 //4. Delete rear.
 //5. Display.
 //6. Display reverse.
+//7. Search the element.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -139,12 +140,41 @@ void dis_rev(NODE first) {
 	}
 }
 
+NODE search(NODE first, int item) {
+	NODE temp;
+	int count = 0, flag = -1, pos;
+
+	temp = first;
+	if(first == NULL) {
+		printf("List empty.\n");
+	}
+	else {
+		while(temp != NULL) {
+			count++;
+			if(temp -> data == item) {
+				flag = count;
+				break;
+			}
+			temp = temp -> next;
+		}
+	}
+	
+	if(flag == -1) {
+		printf("Search unsuccessful. Element not found.\n");
+	}
+	else {
+		printf("Element %d found at position %d", item, count);
+	}
+	
+	return first;
+}
+
 int main() {
 	NODE first = NULL;
 	
 	int item, ch, pos;
 
-  printf("\n 1. Insert Front\n 2. Delete front\n 3. Insert Rear\n 4. Delete rear\n 5. Display elements\n 6. Display in reverse\n");
+  printf("\n 1. Insert Front\n 2. Delete front\n 3. Insert Rear\n 4. Delete rear\n 5. Display elements\n 6. Display in reverse\n 7. Search the element.\n");
   printf("\nEnter your choice : ");
   scanf("%d", &ch);
 
@@ -164,14 +194,14 @@ int main() {
                first = dbldlt_frt(first);
                display(first);
                printf("\n");
-			   break;
+	       break;
 
       case 3 : printf("\nInsert Rear\n");
                scanf("%d", &item);
                first = dblinsert_rear(first, item);
                display(first);
                printf("\n");
-			   break;
+	       break;
 
       case 4 : printf("\nDelete Rear\n");
                printf("Before Deletion : ");
@@ -180,22 +210,30 @@ int main() {
                printf("\nAfter deletion : ");
                display(first);
                printf("\n");
-			   break;
+	       break;
 
       case 5 : printf("\nDisplay the elements\n");
                display(first);
                printf("\n");
-			   break;
+	       break;
 			   
-	  case 6 : printf("\nDisplay the elements in reverse\n");
+			   
+      case 6 : printf("\nDisplay the elements in reverse\n");
                dis_rev(first);
                printf("\n");
-			   break;
+	       break;
+	       
+      case 7 : printf("\nSearch for an element.\n");
+	       printf("Enter the element to be seaarched : ");
+	       scanf("%d", &item);
+	       search(first, item);
+	       printf("\n");
+	       break;
 			   
-			}
-			printf("\n");
-			printf("Enter your choice : ");
-			scanf("%d", &ch);
+	    }
+	    printf("\n");
+	    printf("Enter your choice : ");
+	    scanf("%d", &ch);
 	}
 	return 0;
 	

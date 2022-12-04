@@ -1,3 +1,13 @@
+//1. Insert Front
+//2. Delete front
+//3. Insert Rear
+//4. Delete rear
+//5. Insert an element at a position
+//6. Delete an element from a position
+//7. Display elements
+//8. Count the number of nodes
+//9. Search for an element
+
 #include <stdio.h>
 #include <stdlib.h>
 

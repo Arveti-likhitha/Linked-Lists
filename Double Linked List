@@ -1,0 +1,202 @@
+//1. Insert front.
+//2. Insert rear.
+//3. Delete front.
+//4. Delete rear.
+//5. Display.
+//6. Display reverse.
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+	int data;
+	struct node *prev;
+	struct node *next;
+};
+
+typedef struct node *NODE;
+
+NODE getnode() {
+	NODE x;
+	x = (NODE) malloc (sizeof(struct node));
+	
+	if(x == NULL) {
+		printf("Memory not allocated.\n");
+		exit(0);
+	}
+	return x;
+}
+
+NODE dblinsert_front(NODE first, int item) {
+	NODE temp;
+	temp = getnode();
+	
+	temp -> prev = NULL;
+	temp -> data = item;
+	temp -> next = NULL;
+	
+	if(first == NULL) {
+		return temp;
+		exit(0);
+	}
+	temp -> next = first;
+	first -> prev = temp;
+	
+	return temp;
+}
+
+NODE dblinsert_rear(NODE first, int item) {
+	NODE temp, nxt;
+	temp = getnode();
+	
+	temp -> prev = NULL;
+	temp -> data = item;
+	temp -> next = NULL;
+	
+	if(first == NULL) {
+		return temp;
+	}
+	else {
+		nxt = first;
+		while(nxt -> next != NULL) {
+			nxt = nxt -> next;
+		}
+		nxt -> next = temp;
+		temp -> prev = nxt;
+	}
+	
+	return first;
+}
+
+NODE dbldlt_frt(NODE first) {
+	NODE temp;
+	
+	if(first == NULL) {
+		printf("List empty.\n");
+		return first;
+	}
+	printf("Element deleted is : %d", first -> data);
+	temp = first;
+	first = first -> next;
+	temp -> next = NULL;
+	first -> prev = NULL;
+	free(temp);
+	
+	return first;
+}
+
+NODE dbldel_rear(NODE first) {
+	NODE prv, nxt;
+	
+	if(first == NULL) {
+		printf("List empty.\n");
+		return first;
+	}
+	prv = NULL;
+	nxt = first;
+	while(nxt -> next != NULL) {
+		prv = nxt;
+		nxt = nxt -> next;
+	}
+	printf("Element deleted is : %d", nxt -> data);
+	nxt -> prev = NULL;
+	prv -> next = NULL;
+	free(nxt);
+	
+	return first;
+	
+}
+
+void display(NODE first) {
+	NODE temp;
+	
+	if(first == NULL) {
+		printf("List empty.\n");
+		exit(0);
+	}
+	temp = first;
+	printf("Elements of the list are : ");
+	while(temp != NULL) {
+		printf("--> %d", temp -> data);
+		temp = temp -> next;
+	}
+}
+
+void dis_rev(NODE first) {
+	NODE temp;
+	
+	if(first == NULL) {
+		printf("Lsit empty.\n");
+	}
+	temp = first;
+	while(temp -> next != NULL) {
+		temp = temp -> next; 
+	}
+	printf("List elements in rev order is : ");
+	while(temp != NULL) {
+		printf("--> %d", temp -> data);
+		temp = temp -> prev;
+	}
+}
+
+int main() {
+	NODE first = NULL;
+	
+	int item, ch, pos;
+
+  printf("\n 1. Insert Front\n 2. Delete front\n 3. Insert Rear\n 4. Delete rear\n 5. Display elements\n 6. Display in reverse\n");
+  printf("\nEnter your choice : ");
+  scanf("%d", &ch);
+
+  while(ch) {
+    switch(ch) {
+      case 1 : printf("\nInsert Front\n");
+               scanf("%d", &item);
+               first = dblinsert_front(first, item);
+               display(first);
+               printf("\n");
+               break;
+
+      case 2 : printf("\nDelete Front\n");
+               printf("Before Deletion : ");
+               display(first);
+               printf("\nAfter deletion : ");
+               first = dbldlt_frt(first);
+               display(first);
+               printf("\n");
+			   break;
+
+      case 3 : printf("\nInsert Rear\n");
+               scanf("%d", &item);
+               first = dblinsert_rear(first, item);
+               display(first);
+               printf("\n");
+			   break;
+
+      case 4 : printf("\nDelete Rear\n");
+               printf("Before Deletion : ");
+               display(first);
+               first = dbldel_rear(first);
+               printf("\nAfter deletion : ");
+               display(first);
+               printf("\n");
+			   break;
+
+      case 5 : printf("\nDisplay the elements\n");
+               display(first);
+               printf("\n");
+			   break;
+			   
+	  case 6 : printf("\nDisplay the elements in reverse\n");
+               dis_rev(first);
+               printf("\n");
+			   break;
+			   
+			}
+			printf("\n");
+			printf("Enter your choice : ");
+			scanf("%d", &ch);
+	}
+	return 0;
+	
+}
